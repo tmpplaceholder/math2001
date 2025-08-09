@@ -14,7 +14,7 @@ example {a b : ℝ} (h1 : a - 5 * b = 4) (h2 : b + 2 = 3) : a = 9 := by
 
 
 example {m n : ℤ} (h1 : m + 3 ≤ 2 * n - 1) (h2 : n ≤ 5) : m ≤ 6 := by
-  have h3 :=
+  have h3 : m + 3 ≤ 9 :=
   calc
     m + 3 ≤ 2 * n - 1 := by rel [h1]
     _ ≤ 2 * 5 - 1 := by rel [h2]
@@ -23,12 +23,12 @@ example {m n : ℤ} (h1 : m + 3 ≤ 2 * n - 1) (h2 : n ≤ 5) : m ≤ 6 := by
 
 
 example {r s : ℚ} (h1 : s + 3 ≥ r) (h2 : s + r ≤ 3) : r ≤ 3 := by
-  have h3 : r ≤ 3 + s := by sorry -- justify with one tactic
-  have h4 : r ≤ 3 - s := by sorry -- justify with one tactic
+  have h3 : r ≤ 3 + s := by addarith [h1] -- justify with one tactic
+  have h4 : r ≤ 3 - s := by addarith [h2] -- justify with one tactic
   calc
-    r = (r + r) / 2 := by sorry -- justify with one tactic
-    _ ≤ (3 - s + (3 + s)) / 2 := by sorry -- justify with one tactic
-    _ = 3 := by sorry -- justify with one tactic
+    r = (r + r) / 2 := by ring -- justify with one tactic
+    _ ≤ (3 - s + (3 + s)) / 2 := by rel [h3, h4] -- justify with one tactic
+    _ = 3 := by ring -- justify with one tactic
 
 example {t : ℝ} (h1 : t ^ 2 = 3 * t) (h2 : t ≥ 1) : t ≥ 2 := by
   have h3 :=
@@ -48,22 +48,61 @@ example {a b : ℝ} (h1 : a ^ 2 = b ^ 2 + 1) (h2 : a ≥ 0) : a ≥ 1 := by
 
 
 example {x y : ℤ} (hx : x + 3 ≤ 2) (hy : y + 2 * x ≥ 3) : y > 3 := by
-  sorry
+  have hz : x ≤ -1 := by addarith [hx]
+  calc
+    y ≥ 3 - 2 * x := by addarith [hy]
+    _ ≥ 3 - 2 * -1 := by rel [hz]
+    _ > 3 := by numbers
 
 example (a b : ℝ) (h1 : -b ≤ a) (h2 : a ≤ b) : a ^ 2 ≤ b ^ 2 := by
-  sorry
+  have h3 : 0 ≤ b + a := by addarith [h1]
+  have h4 : 0 ≤ b - a := by addarith [h2]
+  calc
+    a ^ 2 ≤ a ^ 2 + (b + a) * (b - a) := by extra
+    _ = b ^ 2 := by ring
 
 example (a b : ℝ) (h : a ≤ b) : a ^ 3 ≤ b ^ 3 := by
-  sorry
+  have hh : 0 ≤ b - a := by addarith [h]
+  calc
+    a ^ 3 ≤ a ^ 3 + (b - a) * ((b - a) ^ 2 + 3 * (b + a) ^ 2) / 4 := by extra
+    _ = b ^ 3 := by ring
 
 /-! # Exercises -/
 
+/-
+example {x : ℚ} (h1 : x ^ 2 = 4) (h2 : 1 < x) : x = 2 := by
+  have h3 : x * (x + 4 / 2) = 2 * (x + (x ^ 2) / 2) := by ring
+  have h4 : 2 * (x + (x ^ 2) / 2) = 2 * (x + 4 / 2) := by rw [h1]
+  have h5 : x * (x + 4 / 2) + 2 * (x + (x ^ 2) / 2) = 2 * (x + (x ^ 2) / 2) + 2 * (x + 4 / 2) := by rw [h3, h4]
+  have h6 : x * (x + 4 / 2) = 2 * (x + 4 / 2) := by addarith [h5]
+  cancel (x + 4 / 2) at h6
+-/
 
 example {x : ℚ} (h1 : x ^ 2 = 4) (h2 : 1 < x) : x = 2 := by
-  sorry
+  have h3 : x * (x + 4 / 2) = 2 * (x + (x ^ 2) / 2) := by ring
+  rw [h1] at h3
+  cancel (x + 4 / 2) at h3
+
+/-
+example {n : ℤ} (hn : n ^ 2 + 4 = 4 * n) : n = 2 := by
+  have hn1 : (n - 2) ^ 2 = (n ^ 2 + 4) - 4 * n := by ring
+  have hn2 : (n ^ 2 + 4) - 4 * n = 4 * n - 4 * n := by rw [hn]
+  have hn3 : (n - 2) ^ 2 + ((n ^ 2 + 4) - 4 * n) = ((n ^ 2 + 4) - 4 * n) + (4 * n - 4 * n) := by rw [hn1, hn2]
+  have hn4 : (n - 2) ^ 2 = 0 := by addarith [hn3]
+  cancel 2 at hn4
+  addarith [hn4]
+-/
 
 example {n : ℤ} (hn : n ^ 2 + 4 = 4 * n) : n = 2 := by
-  sorry
+  have hn1 : n ^ 2 - 4 * n + 4 = 0 := by addarith [hn]
+  have hn2 : (n - 2) ^ 2 = n ^ 2 - 4 * n + 4 := by ring
+  rw [hn1] at hn2
+  cancel 2 at hn2
+  addarith [hn2]
 
 example (x y : ℚ) (h : x * y = 1) (h2 : x ≥ 1) : y ≤ 1 := by
-  sorry
+  have h1 : x * y ≤ 1 := by addarith [h]
+  have h3 : 0 < x * y := by addarith [h]
+  cancel x at h3
+  have h4 : x * y + 1 * y ≤ 1 + x * y := by rel [h1, h2]
+  addarith [h4]

@@ -20,7 +20,10 @@ example {p : ℚ} (hp : p ^ 2 ≤ 8) : p ≥ -5 := by
       p ^ 2 ≤ 9 := by addarith [hp]
       _ = 3 ^ 2 := by numbers
     numbers
-  sorry
+  · obtain ⟨h1, h2⟩ := hp'
+    calc
+      p ≥ -3 := h1
+      _ ≥ -5 := by numbers
 
 example {a b : ℝ} (h1 : a - 5 * b = 4) (h2 : b + 2 = 3) : a = 9 ∧ b = 1 := by
   constructor
@@ -49,29 +52,98 @@ example {a b : ℝ} (h1 : a ^ 2 + b ^ 2 = 0) : a = 0 ∧ b = 0 := by
       a ^ 2 ≤ a ^ 2 + b ^ 2 := by extra
       _ = 0 := by rw [h1]
     extra
-  sorry
+  · constructor
+    · cancel 2 at h2
+    · have h3: b ^ 2 = 0 :=
+      calc
+        b ^ 2 = a ^ 2 + b ^ 2 := by addarith [h2]
+        _ = 0 := by rw [h1]
+      cancel 2 at h3
 
 /-! # Exercises -/
 
 
 example {a b : ℚ} (H : a ≤ 1 ∧ a + b ≤ 3) : 2 * a + b ≤ 4 := by
-  sorry
+  obtain ⟨h1, h2⟩ := H
+  have h3 : 2 * a = a + a := by ring
+  have h4 : a + b + a ≤ 3 + 1 := by rel [h1, h2]
+  rw [h3]
+  addarith [h4]
 
 example {r s : ℝ} (H : r + s ≤ 1 ∧ r - s ≤ 5) : 2 * r ≤ 6 := by
-  sorry
+  obtain ⟨h1, h2⟩ := H
+  have h3 : 2 * r = r + r := by ring
+  rw [h3]
+  addarith [h1, h2]
 
 example {m n : ℤ} (H : n ≤ 8 ∧ m + 5 ≤ n) : m ≤ 3 := by
-  sorry
+  obtain ⟨h1, h2⟩ := H
+  addarith [h1, h2]
 
 example {p : ℤ} (hp : p + 2 ≥ 9) : p ^ 2 ≥ 49 ∧ 7 ≤ p := by
-  sorry
+  have hp1 : p ≥ 7 := by addarith [hp]
+  have hp2 : p ^ 2 ≥ 7 ^ 2 := by rel [hp1]
+  constructor
+  · addarith [hp2]
+  · apply hp1
 
 example {a : ℚ} (h : a - 1 ≥ 5) : a ≥ 6 ∧ 3 * a ≥ 10 := by
-  sorry
+  have h1 : a ≥ 6 := by addarith [h]
+  have h2 : 3 * a ≥ 3 * 6 := by rel [h1]
+  constructor
+  · apply h1
+  · addarith [h2]
+
+/-
+example {x y : ℚ} (h : x + y = 5 ∧ x + 2 * y = 7) : x = 3 ∧ y = 2 := by
+  obtain ⟨h1, h2⟩ := h
+  have h3 : y = (x + 2 * y) - (x + y) := by ring
+  have h4 : y = 2
+  · rw [h3]
+    addarith [h1, h2]
+  · constructor
+    · addarith [h1, h4]
+    · apply h4
+-/
 
 example {x y : ℚ} (h : x + y = 5 ∧ x + 2 * y = 7) : x = 3 ∧ y = 2 := by
-  sorry
+  obtain ⟨h1, h2⟩ := h
+  have h3 : 2 * y = y + y := by ring
+  rw [h3] at h2
+  have h4 : y = 2 := by addarith [h1, h2]
+  constructor
+  · addarith [h1, h4]
+  · apply h4
+
+/-
+example {a b : ℝ} (h1 : a * b = a) (h2 : a * b = b) :
+    a = 0 ∧ b = 0 ∨ a = 1 ∧ b = 1 := by
+  have h3 : a * (b - 1) = a * b - a := by ring
+  have h4 : a * (b - 1) = 0
+  · rw [h3]
+    addarith [h1]
+  · obtain h5 | h6 : a = 0 ∨ b - 1 = 0 := eq_zero_or_eq_zero_of_mul_eq_zero h4
+    · left
+      constructor
+      · apply h5
+      · addarith [h1, h2, h5]
+    · right
+      constructor
+      · addarith [h1, h2, h6]
+      · addarith [h6]
+-/
 
 example {a b : ℝ} (h1 : a * b = a) (h2 : a * b = b) :
     a = 0 ∧ b = 0 ∨ a = 1 ∧ b = 1 := by
-  sorry
+  have h3 : a * (b - 1) = a * b - a := by ring
+  have h4 : a * b - a = 0 := by addarith [h1]
+  rw [h4] at h3
+  obtain h5 | h6 : a = 0 ∨ b - 1 = 0 := eq_zero_or_eq_zero_of_mul_eq_zero h3
+  · left
+    constructor
+    · apply h5
+    · addarith [h1, h2, h5]
+  · right
+    constructor
+    · addarith [h1, h2, h6]
+    · addarith [h6]
