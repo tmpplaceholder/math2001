@@ -171,8 +171,8 @@ example {x : ℚ} (h1 : x ^ 2 = 4) (h2 : 1 < x) : x = 2 := by
       (x + 2) * (x - 2) = x ^ 2 + 2 * x - 2 * x - 4 := by ring
       _ = 0 := by addarith [h1]
   rw [mul_eq_zero] at h3
-  obtain h4 | h5 := h3 <;> have h6 : 1 + 2 < x + 2 := by rel [h2]
-  · rw [h4] at h6
+  obtain h4 | h5 := h3
+  · have h6 : 3 < 0 := by addarith [h2, h4]
     numbers at h6
   · addarith [h5]
 
