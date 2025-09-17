@@ -23,8 +23,7 @@ example {n : ℕ} : n ^ 2 ≠ 2 := by
     n ^ 2 ≤ 1 ^ 2 := by rel [hn]
     _ < 2 := by numbers
   apply ne_of_gt
-  calc
-    2 < 2 ^ 2 := by numbers
+  calc 2 < 2 ^ 2 := by numbers
     _ ≤ n ^ 2 := by rel [hn]
 
 example {x : ℝ} (hx : 2 * x + 1 = 5) : x = 1 ∨ x = 2 := by

@@ -22,8 +22,7 @@ example {t : ℝ} (h : ∃ a : ℝ, a * t < 0) : t ≠ 0 := by
     apply ne_of_gt
     apply hxt'
   · have hxt'' : 0 < x * (-t) :=
-    calc
-      0 < (-x) * t := by addarith [hxt]
+    calc 0 < (-x) * t := by addarith [hxt]
       _ = x * (-t) := by ring
     cancel x at hxt''
     have hxt''' : t < 0 := by addarith [hxt'']
@@ -51,11 +50,9 @@ example (a : ℤ) : ∃ m n : ℤ, m ^ 2 - n ^ 2 = 2 * a + 1 := by
 example {p q : ℝ} (h : p < q) : ∃ x, p < x ∧ x < q := by
   use (p + q) / 2
   constructor
-  · calc
-    p = (p + p) / 2 := by ring
+  · calc p = (p + p) / 2 := by ring
     _ < (p + q) / 2 := by rel [h]
-  · calc
-    (p + q) / 2 < (q + q) / 2 := by rel [h]
+  · calc (p + q) / 2 < (q + q) / 2 := by rel [h]
     _ = q := by ring
 
 example : ∃ a b c d : ℕ,
@@ -103,17 +100,17 @@ example {t : ℝ} (h : ∃ a : ℝ, a * t + 1 < a + t) : t ≠ 1 := by
   have hxt3 : (1 - x) * (t - 1) > 0
   · rw [hxt1]
     addarith [hxt]
-  · have hxt4 : (x - 1) * -(t - 1) > 0
-    · rw [hxt2]
-      apply hxt3
-    · obtain hx1 | hx2 : x - 1 ≤ 0 ∨ x - 1 > 0 := le_or_gt (x - 1) 0
-      · have hx3 : 1 - x ≥ 0 := by addarith [hx1]
-        cancel 1 - x at hxt3
-        apply ne_of_gt
-        addarith [hxt3]
-      · cancel x - 1 at hxt4
-        apply ne_of_lt
-        addarith [hxt4]
+  have hxt4 : (x - 1) * -(t - 1) > 0
+  · rw [hxt2]
+    apply hxt3
+  obtain hx1 | hx2 : x - 1 ≤ 0 ∨ x - 1 > 0 := le_or_gt (x - 1) 0
+  · have hx3 : 1 - x ≥ 0 := by addarith [hx1]
+    cancel 1 - x at hxt3
+    apply ne_of_gt
+    addarith [hxt3]
+  · cancel x - 1 at hxt4
+    apply ne_of_lt
+    addarith [hxt4]
 -/
 
 example {t : ℝ} (h : ∃ a : ℝ, a * t + 1 < a + t) : t ≠ 1 := by

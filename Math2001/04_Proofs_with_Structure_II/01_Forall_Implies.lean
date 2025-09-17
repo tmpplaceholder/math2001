@@ -22,12 +22,10 @@ example {n : ℕ} (hn : ∀ m, n ∣ m) : n = 1 := by
 example {a b : ℝ} (h : ∀ x, x ≥ a ∨ x ≤ b) : a ≤ b := by
   have h1 : (a + b) / 2 ≥ a ∨ (a + b) / 2 ≤ b := by apply h
   obtain h2 | h3 := h1
-  · calc
-      b = 2 * ((a + b) / 2) - a := by ring
+  · calc b = 2 * ((a + b) / 2) - a := by ring
       _ ≥ 2 * a - a := by rel [h2]
       _ = a := by ring
-  · calc
-      a = 2 * ((a + b) / 2) - b := by ring
+  · calc a = 2 * ((a + b) / 2) - b := by ring
       _ ≤ 2 * b - b := by rel [h3]
       _ = b := by ring
 
@@ -54,22 +52,20 @@ example : ∃ c : ℝ, ∀ x y, x ^ 2 + y ^ 2 ≤ 4 → x + y ≥ c := by
   intro x y h1
   have h2 : -3 ≤ x + y ∧ x + y ≤ 3
   · apply abs_le_of_sq_le_sq'
-    · calc
-        (x + y) ^ 2 ≤ (x + y) ^ 2 + (x - y) ^ 2 := by extra
+    · calc (x + y) ^ 2 ≤ (x + y) ^ 2 + (x - y) ^ 2 := by extra
         _ = 2 * (x ^ 2 + y ^ 2) := by ring
         _ ≤ 2 * 4 := by rel [h1]
         _ ≤ 3 ^ 2 := by numbers
     · numbers
-  · obtain ⟨h3, h4⟩ := h2
-    apply h3
+  obtain ⟨h3, h4⟩ := h2
+  apply h3
 -/
 
 example : ∃ c : ℝ, ∀ x y, x ^ 2 + y ^ 2 ≤ 4 → x + y ≥ c := by
   use -3
   intro x y h1
   have h2 : (x + y) ^ 2 ≤ 3 ^ 2 :=
-  calc
-    (x + y) ^ 2 ≤ (x + y) ^ 2 + (x - y) ^ 2 := by extra
+  calc (x + y) ^ 2 ≤ (x + y) ^ 2 + (x - y) ^ 2 := by extra
     _ = 2 * (x ^ 2 + y ^ 2) := by ring
     _ ≤ 2 * 4 := by rel [h1]
     _ ≤ 3 ^ 2 := by numbers
@@ -115,8 +111,7 @@ example : ¬ Prime 6 := by
 
 /-
 example {a : ℚ} (h : ∀ b : ℚ, a ≥ -3 + 4 * b - b ^ 2) : a ≥ 1 :=
-  calc
-    a ≥ -3 + 4 * 2 - 2 ^ 2 := by apply h
+  calc a ≥ -3 + 4 * 2 - 2 ^ 2 := by apply h
     _ = 1 := by numbers
 -/
 
@@ -131,17 +126,17 @@ example {n : ℤ} (hn : ∀ m, 1 ≤ m → m ≤ 5 → m ∣ n) : 15 ∣ n := by
   · apply hn
     · numbers
     · numbers
-  · have h2 : 5 ∣ n
-    · apply hn
-      · numbers
-      · numbers
-    · obtain ⟨a, h3⟩ := h1
-      obtain ⟨b, h4⟩ := h2
-      have h5 : n = 6 * n - 5 * n := by ring
-      have h6 : 6 * n - 5 * n = 6 * (5 * b) - 5 * n := by rw [h4]
-      rw [h5, h6, h3]
-      use 2 * b - a
-      ring
+  have h2 : 5 ∣ n
+  · apply hn
+    · numbers
+    · numbers
+  obtain ⟨a, h3⟩ := h1
+  obtain ⟨b, h4⟩ := h2
+  have h5 : n = 6 * n - 5 * n := by ring
+  have h6 : 6 * n - 5 * n = 6 * (5 * b) - 5 * n := by rw [h4]
+  rw [h5, h6, h3]
+  use 2 * b - a
+  ring
 -/
 
 example {n : ℤ} (hn : ∀ m, 1 ≤ m → m ≤ 5 → m ∣ n) : 15 ∣ n := by

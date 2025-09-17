@@ -16,16 +16,14 @@ example {n : ℤ} (hn : 8 ∣ 5 * n) : 8 ∣ n := by
 example {n : ℤ} (hn : 8 ∣ 5 * n) : 8 ∣ n := by
   obtain ⟨a, ha⟩ := hn
   use 5 * a - 3 * n
-  calc
-    n = 5 * (5 * n) - 24 * n := by ring
+  calc n = 5 * (5 * n) - 24 * n := by ring
     _ = 5 * (8 * a) - 24 * n := by rw [ha]
     _ = 8 * (5 * a - 3 * n) := by ring
 
 example {n : ℤ} (h1 : 5 ∣ 3 * n) : 5 ∣ n := by
   obtain ⟨x, hx⟩ := h1
   use 2 * x - n
-  calc
-    n = 2 * (3 * n) - 5 * n := by ring
+  calc n = 2 * (3 * n) - 5 * n := by ring
     _ = 2 * (5 * x) - 5 * n := by rw [hx]
     _ = 5 * (2 * x - n) := by ring
 

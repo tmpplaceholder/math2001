@@ -66,8 +66,7 @@ example {x : ℝ} : x ^ 2 + x - 6 = 0 ↔ x = -3 ∨ x = 2 := by
   constructor
   · intro h1
     have h2 : (x + 3) * (x - 2) = 0 :=
-    calc
-      (x + 3) * (x - 2) = x ^ 2 + x - 6 := by ring
+    calc (x + 3) * (x - 2) = x ^ 2 + x - 6 := by ring
       _ = 0 := h1
     obtain h3 | h4 : x + 3 = 0 ∨ x - 2 = 0 := eq_zero_or_eq_zero_of_mul_eq_zero h2
     · left
@@ -76,19 +75,16 @@ example {x : ℝ} : x ^ 2 + x - 6 = 0 ↔ x = -3 ∨ x = 2 := by
       addarith [h4]
   · intro h5
     obtain h6 | h7 := h5
-    · calc
-        x ^ 2 + x - 6 = (-3) ^ 2 + (-3) - 6 := by rw [h6]
+    · calc x ^ 2 + x - 6 = (-3) ^ 2 + (-3) - 6 := by rw [h6]
         _ = 0 := by ring
-    · calc
-        x ^ 2 + x - 6 = 2 ^ 2 + 2 - 6 := by rw [h7]
+    · calc x ^ 2 + x - 6 = 2 ^ 2 + 2 - 6 := by rw [h7]
         _ = 0 := by ring
 
 example {a : ℤ} : a ^ 2 - 5 * a + 5 ≤ -1 ↔ a = 2 ∨ a = 3 := by
   constructor
   · intro h1
     have h2 : (2 * a - 5) ^ 2 ≤ 1 ^ 2 :=
-    calc
-      (2 * a - 5) ^ 2 = 4 * (a ^ 2 - 5 * a + 5) + 5 := by ring
+    calc (2 * a - 5) ^ 2 = 4 * (a ^ 2 - 5 * a + 5) + 5 := by ring
       _ ≤ 4 * -1 + 5 := by rel [h1]
       _ = 1 ^ 2 := by numbers
     have h3 : 0 ≤ (1:ℤ) := by numbers
@@ -104,11 +100,9 @@ example {a : ℤ} : a ^ 2 - 5 * a + 5 ≤ -1 ↔ a = 2 ∨ a = 3 := by
       numbers
   · intro h8
     obtain h9 | h10 := h8
-    · calc
-        a ^ 2 - 5 * a + 5 = 2 ^ 2 - 5 * 2 + 5 := by rw [h9]
+    · calc a ^ 2 - 5 * a + 5 = 2 ^ 2 - 5 * 2 + 5 := by rw [h9]
         _ ≤ -1 := by numbers
-    · calc
-        a ^ 2 - 5 * a + 5 = 3 ^ 2 - 5 * 3 + 5 := by rw [h10]
+    · calc a ^ 2 - 5 * a + 5 = 3 ^ 2 - 5 * 3 + 5 := by rw [h10]
         _ ≤ -1 := by numbers
 
 example {n : ℤ} (hn : n ^ 2 - 10 * n + 24 = 0) : Even n := by

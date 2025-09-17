@@ -29,16 +29,14 @@ example {a b c : ℕ} (hab : a ∣ b) (hbc : b ^ 2 ∣ c) : a ^ 2 ∣ c := by
   obtain ⟨x, hx⟩ := hab
   obtain ⟨y, hy⟩ := hbc
   use x ^ 2 * y
-  calc
-    c = b ^ 2 * y := hy
+  calc c = b ^ 2 * y := hy
     _ = (a * x) ^ 2 * y := by rw [hx]
     _ = a ^ 2 * (x ^ 2 * y) := by ring
 
 example {x y z : ℕ} (h : x * y ∣ z) : x ∣ z := by
   obtain ⟨t, ht⟩ := h
   use y * t
-  calc
-    z = (x * y) * t := ht
+  calc z = (x * y) * t := ht
     _ = x * (y * t) := by ring
 
 example : ¬(5 : ℤ) ∣ 12 := by
@@ -66,9 +64,8 @@ example {a b : ℕ} (hb : 0 < b) (hab : a ∣ b) : a ≤ b := by
 example {a b : ℕ} (hab : a ∣ b) (hb : 0 < b) : 0 < a := by
   obtain ⟨k, hk⟩ := hab
   have H1 :=
-    calc
-      0 < b := hb
-      _ = a * k := hk
+  calc 0 < b := hb
+    _ = a * k := hk
   cancel k at H1
 
 /-! # Exercises -/

@@ -27,8 +27,7 @@ example {r s : ℚ} (h1 : s + 3 ≥ r) (h2 : s + r ≤ 3) : r ≤ 3 :=
 -- Example 1.4.3
 -- Exercise: type out the whole proof printed in the text as a Lean proof.
 example {x y : ℝ} (h1 : y ≤ x + 5) (h2 : x ≤ -2) : x + y < 2 :=
-  calc
-    x + y ≤ x + (x + 5) := by rel [h1]
+  calc x + y ≤ x + (x + 5) := by rel [h1]
     _ = 2 * x + 5 := by ring
     _ ≤ 2 * -2 + 5 := by rel [h2]
     _ < 2 := by numbers
@@ -61,8 +60,7 @@ example {t : ℚ} (ht : t ≥ 10) : t ^ 2 - 3 * t - 17 ≥ 5 :=
 -- Example 1.4.6
 -- Exercise: type out the whole proof printed in the text as a Lean proof.
 example {n : ℤ} (hn : n ≥ 5) : n ^ 2 > 2 * n + 11 :=
-  calc
-    n ^ 2 = n * n := by ring
+  calc n ^ 2 = n * n := by ring
     _ ≥ 5 * n := by rel [hn]
     _ = 2 * n + 3 * n := by ring
     _ ≥ 2 * n + 3 * 5 := by rel [hn]
@@ -129,45 +127,38 @@ up in Lean. -/
 
 
 example {x y : ℤ} (h1 : x + 3 ≥ 2 * y) (h2 : 1 ≤ y) : x ≥ -1 :=
-  calc
-    x = (x + 3) - 3 := by ring
+  calc x = (x + 3) - 3 := by ring
     _ ≥ 2 * y - 3 := by rel [h1]
     _ ≥ 2 * 1 - 3 := by rel [h2]
     _ = -1 := by numbers
 
 example {a b : ℚ} (h1 : 3 ≤ a) (h2 : a + 2 * b ≥ 4) : a + b ≥ 3 :=
-  calc
-    a + b = ((a + 2 * b) + a) / 2 := by ring
+  calc a + b = ((a + 2 * b) + a) / 2 := by ring
     _ ≥ (4 + 3) / 2 := by rel [h1, h2]
     _ ≥ 3 := by numbers
 
 example {x : ℤ} (hx : x ≥ 9) : x ^ 3 - 8 * x ^ 2 + 2 * x ≥ 3 :=
-  calc
-    x ^ 3 - 8 * x ^ 2 + 2 * x = 3 + ((x - 8) * x ^ 2 + 2 * x - 3) := by ring
+  calc x ^ 3 - 8 * x ^ 2 + 2 * x = 3 + ((x - 8) * x ^ 2 + 2 * x - 3) := by ring
     _ ≥ 3 + ((9 - 8) * x ^ 2 + 2 * 9 - 3) := by rel [hx]
     _ = 3 + (x ^ 2 + 15) := by ring
     _ ≥ 3 := by extra
 
 example {n : ℤ} (hn : n ≥ 10) : n ^ 4 - 2 * n ^ 2 > 3 * n ^ 3 :=
-  calc
-    n ^ 4 - 2 * n ^ 2 = 3 * n ^ 3 + ((n - 4) * n ^ 3 + (n - 2) * n ^ 2) := by ring
+  calc n ^ 4 - 2 * n ^ 2 = 3 * n ^ 3 + ((n - 4) * n ^ 3 + (n - 2) * n ^ 2) := by ring
     _ ≥ 3 * n ^ 3 + ((10 - 4) * n ^ 3 + (10 - 2) * n ^ 2) := by rel [hn]
     _ = 3 * n ^ 3 + (6 * n ^ 3 + 8 * n ^ 2) := by ring
     _ > 3 * n ^ 3 := by extra
 
 example {n : ℤ} (h1 : n ≥ 5) : n ^ 2 - 2 * n + 3 > 14 :=
-  calc
-    n ^ 2 - 2 * n + 3 = (n - 2) * n + 3 := by ring
+  calc n ^ 2 - 2 * n + 3 = (n - 2) * n + 3 := by ring
     _ ≥ (5 - 2) * n + 3 := by rel [h1]
     _ ≥ (5 - 2) * 5 + 3 := by rel [h1]
     _ > 14 := by numbers
 
 example {x : ℚ} : x ^ 2 - 2 * x ≥ -1 :=
-  calc
-    x ^ 2 - 2 * x = -1 + (x - 1) ^ 2 := by ring
+  calc x ^ 2 - 2 * x = -1 + (x - 1) ^ 2 := by ring
     _ ≥ -1 := by extra
 
 example (a b : ℝ) : a ^ 2 + b ^ 2 ≥ 2 * a * b :=
-  calc
-    a ^ 2 + b ^ 2 = 2 * a * b + (a - b) ^ 2 := by ring
+  calc a ^ 2 + b ^ 2 = 2 * a * b + (a - b) ^ 2 := by ring
     _ ≥ 2 * a * b := by extra

@@ -46,15 +46,13 @@ example {x y : ℤ} (hx : Odd x) (hy : Odd y) : Odd (x * y + 2 * y) := by
   obtain ⟨a, ha⟩ := hx
   obtain ⟨b, hb⟩ := hy
   use 2 * a * b + 3 * b + a + 1
-  calc
-    x * y + 2 * y = (2 * a + 1) * (2 * b + 1) + 2 * (2 * b + 1) := by rw [ha, hb]
+  calc x * y + 2 * y = (2 * a + 1) * (2 * b + 1) + 2 * (2 * b + 1) := by rw [ha, hb]
     _ = 2 * (2 * a * b + 3 * b + a + 1) + 1 := by ring
 
 example {m : ℤ} (hm : Odd m) : Even (3 * m - 5) := by
   obtain ⟨t, ht⟩ := hm
   use 3 * t - 1
-  calc
-    3 * m - 5 = 3 * (2 * t + 1) - 5 := by rw [ht]
+  calc 3 * m - 5 = 3 * (2 * t + 1) - 5 := by rw [ht]
     _ = 2 * (3 * t - 1) := by ring
 
 example {n : ℤ} (hn : Even n) : Odd (n ^ 2 + 2 * n - 5) := by

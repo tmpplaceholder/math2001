@@ -20,10 +20,9 @@ example {p : ℚ} (hp : p ^ 2 ≤ 8) : p ≥ -5 := by
       p ^ 2 ≤ 9 := by addarith [hp]
       _ = 3 ^ 2 := by numbers
     numbers
-  · obtain ⟨h1, h2⟩ := hp'
-    calc
-      p ≥ -3 := h1
-      _ ≥ -5 := by numbers
+  obtain ⟨h1, h2⟩ := hp'
+  calc p ≥ -3 := h1
+    _ ≥ -5 := by numbers
 
 example {a b : ℝ} (h1 : a - 5 * b = 4) (h2 : b + 2 = 3) : a = 9 ∧ b = 1 := by
   constructor
@@ -52,13 +51,12 @@ example {a b : ℝ} (h1 : a ^ 2 + b ^ 2 = 0) : a = 0 ∧ b = 0 := by
       a ^ 2 ≤ a ^ 2 + b ^ 2 := by extra
       _ = 0 := by rw [h1]
     extra
-  · constructor
-    · cancel 2 at h2
-    · have h3: b ^ 2 = 0 :=
-      calc
-        b ^ 2 = a ^ 2 + b ^ 2 := by addarith [h2]
-        _ = 0 := by rw [h1]
-      cancel 2 at h3
+  constructor
+  · cancel 2 at h2
+  · have h3: b ^ 2 = 0 :=
+    calc b ^ 2 = a ^ 2 + b ^ 2 := by addarith [h2]
+      _ = 0 := by rw [h1]
+    cancel 2 at h3
 
 /-! # Exercises -/
 
@@ -101,9 +99,9 @@ example {x y : ℚ} (h : x + y = 5 ∧ x + 2 * y = 7) : x = 3 ∧ y = 2 := by
   have h4 : y = 2
   · rw [h3]
     addarith [h1, h2]
-  · constructor
-    · addarith [h1, h4]
-    · apply h4
+  constructor
+  · addarith [h1, h4]
+  · apply h4
 -/
 
 example {x y : ℚ} (h : x + y = 5 ∧ x + 2 * y = 7) : x = 3 ∧ y = 2 := by
@@ -122,15 +120,15 @@ example {a b : ℝ} (h1 : a * b = a) (h2 : a * b = b) :
   have h4 : a * (b - 1) = 0
   · rw [h3]
     addarith [h1]
-  · obtain h5 | h6 : a = 0 ∨ b - 1 = 0 := eq_zero_or_eq_zero_of_mul_eq_zero h4
-    · left
-      constructor
-      · apply h5
-      · addarith [h1, h2, h5]
-    · right
-      constructor
-      · addarith [h1, h2, h6]
-      · addarith [h6]
+  obtain h5 | h6 : a = 0 ∨ b - 1 = 0 := eq_zero_or_eq_zero_of_mul_eq_zero h4
+  · left
+    constructor
+    · apply h5
+    · addarith [h1, h2, h5]
+  · right
+    constructor
+    · addarith [h1, h2, h6]
+    · addarith [h6]
 -/
 
 example {a b : ℝ} (h1 : a * b = a) (h2 : a * b = b) :

@@ -49,22 +49,19 @@ example {a b : ℝ} (h1 : a ^ 2 = b ^ 2 + 1) (h2 : a ≥ 0) : a ≥ 1 := by
 
 example {x y : ℤ} (hx : x + 3 ≤ 2) (hy : y + 2 * x ≥ 3) : y > 3 := by
   have hz : x ≤ -1 := by addarith [hx]
-  calc
-    y ≥ 3 - 2 * x := by addarith [hy]
+  calc y ≥ 3 - 2 * x := by addarith [hy]
     _ ≥ 3 - 2 * -1 := by rel [hz]
     _ > 3 := by numbers
 
 example (a b : ℝ) (h1 : -b ≤ a) (h2 : a ≤ b) : a ^ 2 ≤ b ^ 2 := by
   have h3 : 0 ≤ b + a := by addarith [h1]
   have h4 : 0 ≤ b - a := by addarith [h2]
-  calc
-    a ^ 2 ≤ a ^ 2 + (b + a) * (b - a) := by extra
+  calc a ^ 2 ≤ a ^ 2 + (b + a) * (b - a) := by extra
     _ = b ^ 2 := by ring
 
 example (a b : ℝ) (h : a ≤ b) : a ^ 3 ≤ b ^ 3 := by
   have hh : 0 ≤ b - a := by addarith [h]
-  calc
-    a ^ 3 ≤ a ^ 3 + (b - a) * ((b - a) ^ 2 + 3 * (b + a) ^ 2) / 4 := by extra
+  calc a ^ 3 ≤ a ^ 3 + (b - a) * ((b - a) ^ 2 + 3 * (b + a) ^ 2) / 4 := by extra
     _ = b ^ 3 := by ring
 
 /-! # Exercises -/
