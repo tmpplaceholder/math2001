@@ -4,6 +4,7 @@ image:
 vscode:
   extensions:
     - leanprover.lean4
+    - mvllow.rose-pine
 
 tasks:
   - init: |
