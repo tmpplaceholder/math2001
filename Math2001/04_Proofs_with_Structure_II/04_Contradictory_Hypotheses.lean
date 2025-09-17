@@ -171,9 +171,23 @@ example {x : ℚ} (h1 : x ^ 2 = 4) (h2 : 1 < x) : x = 2 := by
       (x + 2) * (x - 2) = x ^ 2 + 2 * x - 2 * x - 4 := by ring
       _ = 0 := by addarith [h1]
   rw [mul_eq_zero] at h3
-  sorry
+  obtain h4 | h5 := h3 <;> have h6 : 1 + 2 < x + 2 := by rel [h2]
+  · rw [h4] at h6
+    numbers at h6
+  · addarith [h5]
 
 namespace Nat
 
 example (p : ℕ) (h : Prime p) : p = 2 ∨ Odd p := by
-  sorry
+  obtain h1 | h2 : p ≤ 2 ∨ 3 ≤ p := le_or_succ_le p 2 <;> obtain ⟨h3, h4⟩ := h
+  · left
+    apply le_antisymm h1 h3
+  · right
+    obtain h6 | h7 : Even p ∨ Odd p := even_or_odd p <;> obtain ⟨k, h8⟩ := h6
+    · have h9 : 2 ∣ p <;> use k
+      · apply h8
+      obtain h10 | h11 : 2 = 1 ∨ 2 = p := h4 2 h9 -- ; apply h4 ; apply h9
+      · numbers at h10
+      · have h12 : 3 ≤ 2 := by addarith [h2, h11]
+        numbers at h12
+    · apply h7
