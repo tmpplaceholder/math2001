@@ -1,0 +1,17 @@
+{
+  "name": "Math2001",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "leanprover.lean4",
+        "mvllow.rose-pine"
+      ]
+    }
+  },
+  "postCreateCommand": "lake exe cache get && lake build Library && lake build AutograderLib",
+  "postStartCommand": "PATH=\"$PATH:/workspace/math2001/scripts\"",
+  "remoteUser": "gitpod"
+}
