@@ -94,7 +94,7 @@ example {a b c : ℕ} (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
   obtain h1 | h2 : a ≤ 2 ∨ 3 ≤ a := le_or_succ_le a 2
   · obtain h3 | h4 : b ≤ 1 ∨ 2 ≤ b := le_or_succ_le b 1
     · have h5 : c ^ 2 < 3 ^ 2 :=
-      calc c ^ 2 = a ^ 2 + b ^ 2 := by addarith [h_pyth]
+      calc c ^ 2 = a ^ 2 + b ^ 2 := by rw [h_pyth]
         _ ≤ 2 ^ 2 + 1 ^ 2 := by rel [h1, h3]
         _ < 3 ^ 2 := by numbers
       cancel 2 at h5
@@ -105,7 +105,7 @@ example {a b c : ℕ} (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
       cancel 2 at h6
       have h7 : b + 1 ≤ c := by addarith [h6]
       have h8 : c ^ 2 < (b + 1) ^ 2 :=
-      calc c ^ 2 = a ^ 2 + b ^ 2 := by addarith [h_pyth]
+      calc c ^ 2 = a ^ 2 + b ^ 2 := by rw [h_pyth]
         _ ≤ 2 ^ 2 + b ^ 2 := by rel [h1]
         _ = b ^ 2 + 2 * 2 := by ring
         _ ≤ b ^ 2 + 2 * b := by rel [h4]
