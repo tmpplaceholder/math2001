@@ -66,7 +66,15 @@ example (n : ℤ) : Int.Even n ↔ ¬ Int.Odd n := by
 
 
 example (n : ℤ) : Int.Odd n ↔ ¬ Int.Even n := by
-  sorry
+  constructor
+  · have h1 : Int.Odd n → Int.Even n → 0 ≡ 1 [ZMOD 2] <;> rw [Int.even_iff_modEq, Int.odd_iff_modEq] at * <;> intro h2 h3
+    · calc 0 ≡ n [ZMOD 2] := by rel [h3]
+        _ ≡ 1 [ZMOD 2] := by rel [h2]
+    · have h4 : 0 ≡ 1 [ZMOD 2] := h1 h2 h3
+      numbers at h4
+  · obtain h5 | h6 := Int.even_or_odd n <;> intro h7
+    · contradiction
+    · apply h6
 
 example (n : ℤ) : ¬(n ^ 2 ≡ 2 [ZMOD 3]) := by
   intro h
@@ -76,8 +84,17 @@ example (n : ℤ) : ¬(n ^ 2 ≡ 2 [ZMOD 3]) := by
       _ ≡ n ^ 2 [ZMOD 3] := by rel [hn]
       _ ≡ 2 [ZMOD 3] := by rel [h]
     numbers at h -- contradiction!
-  · sorry
-  · sorry
+  · have h :=
+    calc (1:ℤ) = 1 ^ 2 := by numbers
+      _ ≡ n ^ 2 [ZMOD 3] := by rel [hn]
+      _ ≡ 2 [ZMOD 3] := h
+    numbers at h
+  · have h :=
+    calc 1 ≡ 1 + 3 * 1 [ZMOD 3] := by extra
+      _ = 2 ^ 2 := by numbers
+      _ ≡ n ^ 2 [ZMOD 3] := by rel [hn]
+      _ ≡ 2 [ZMOD 3] := h
+    numbers at h
 
 example {p : ℕ} (k l : ℕ) (hk1 : k ≠ 1) (hkp : k ≠ p) (hkl : p = k * l) :
     ¬(Prime p) := by
@@ -104,7 +121,12 @@ example (a b : ℤ) (h : ∃ q, b * q < a ∧ a < b * (q + 1)) : ¬b ∣ a := by
   calc b * k = a := by rw [hk]
     _ < b * (q + 1) := hq₂
   cancel b at h1
-  sorry
+  have h2 : b * q < b * k := -- by addarith [hq₁, hk]
+  calc b * q < a := hq₁
+    _ = b * k := hk
+  cancel b at h2
+  have : q + 1 ≤ k := by addarith [h2]
+  have : False <;> have := not_lt_of_ge this <;> contradiction
 
 example {p : ℕ} (hp : 2 ≤ p)  (T : ℕ) (hTp : p < T ^ 2)
     (H : ∀ (m : ℕ), 1 < m → m < T → ¬ (m ∣ p)) :
@@ -116,14 +138,21 @@ example {p : ℕ} (hp : 2 ≤ p)  (T : ℕ) (hTp : p < T ^ 2)
   intro h_div
   obtain ⟨l, hl⟩ := h_div
   have : l ∣ p
-  · sorry
+  · use m
+    rw [hl]
+    ring
   have hl1 :=
     calc m * 1 = m := by ring
       _ < p := hmp
       _ = m * l := hl
   cancel m at hl1
   have hl2 : l < T
-  · sorry
+  · have : T * l < T * T :=
+    calc T * l ≤ m * l := by rel [hmT]
+      _ = p := by rw [hl]
+      _ < T ^ 2 := by rel [hTp]
+      _ = T * T := by ring
+    cancel T at this
   have : ¬ l ∣ p := H l hl1 hl2
   contradiction
 
@@ -141,10 +170,10 @@ example : Prime 79 := by
     constructor <;> numbers
   · use 19
     constructor <;> numbers
-  · sorry
-  · sorry
-  · sorry
-  · sorry
+  · have : ∃ q, 5 * q < 79 ∧ 79 < 5 * (q + 1) <;> use 15 <;> constructor <;> numbers
+  · have : ∃ q, 6 * q < 79 ∧ 79 < 6 * (q + 1) <;> use 13 <;> constructor <;> numbers
+  · have : ∃ q, 7 * q < 79 ∧ 79 < 7 * (q + 1) <;> use 11 <;> constructor <;> numbers
+  · have : ∃ q, 8 * q < 79 ∧ 79 < 8 * (q + 1) <;> use 9 <;> constructor <;> numbers
 
 /-! # Exercises -/
 
