@@ -126,7 +126,8 @@ example (a b : ℤ) (h : ∃ q, b * q < a ∧ a < b * (q + 1)) : ¬b ∣ a := by
     _ = b * k := hk
   cancel b at h2
   have : q + 1 ≤ k := by addarith [h2]
-  have : False <;> have := not_lt_of_ge this <;> contradiction
+  have : ¬k < q + 1 := not_lt_of_ge this
+  contradiction
 
 example {p : ℕ} (hp : 2 ≤ p)  (T : ℕ) (hTp : p < T ^ 2)
     (H : ∀ (m : ℕ), 1 < m → m < T → ¬ (m ∣ p)) :
@@ -170,31 +171,91 @@ example : Prime 79 := by
     constructor <;> numbers
   · use 19
     constructor <;> numbers
-  · have : ∃ q, 5 * q < 79 ∧ 79 < 5 * (q + 1) <;> use 15 <;> constructor <;> numbers
-  · have : ∃ q, 6 * q < 79 ∧ 79 < 6 * (q + 1) <;> use 13 <;> constructor <;> numbers
-  · have : ∃ q, 7 * q < 79 ∧ 79 < 7 * (q + 1) <;> use 11 <;> constructor <;> numbers
-  · have : ∃ q, 8 * q < 79 ∧ 79 < 8 * (q + 1) <;> use 9 <;> constructor <;> numbers
+  · use 15
+    constructor <;> numbers
+  · use 13
+    constructor <;> numbers
+  · use 11
+    constructor <;> numbers
+  · use 9
+    constructor <;> numbers
 
 /-! # Exercises -/
 
 
 example : ¬ (∃ t : ℝ, t ≤ 4 ∧ t ≥ 5) := by
-  sorry
+  intro h1
+  obtain ⟨x, h2, h3⟩ := h1
+  have h4 : 5 ≤ 4 := by addarith [h2, h3]
+  numbers at h4
 
 example : ¬ (∃ a : ℝ, a ^ 2 ≤ 8 ∧ a ^ 3 ≥ 30) := by
-  sorry
+  intro h1
+  obtain ⟨x, h2, h3⟩ := h1
+  have h4 : x ^ 6 ≤ 512 :=
+  calc x ^ 6 = x ^ 2 * x ^ 2 * x ^ 2 := by ring
+    _ ≤ 8 * 8 * 8 := by rel [h2]
+    _ = 512 := by numbers
+  have h5 : x ^ 6 ≥ 900 :=
+  calc x ^ 6 = x ^ 3 * x ^ 3 := by ring
+    _ ≥ 30 * 30 := by rel [h3]
+    _ = 900 := by numbers
+  have h6 : 900 ≤ 512 := by addarith [h4, h5]
+  numbers at h6
 
 example : ¬ Int.Even 7 := by
-  sorry
+  intro h1
+  rw [Int.even_iff_modEq] at h1
+  have h2 : 1 ≡ 0 [ZMOD 2] :=
+  calc 1 ≡ 1 + 2 * 3 [ZMOD 2] := by extra
+    _ = 7 := by ring
+    _ ≡ 0 [ZMOD 2] := by rel [h1]
+  numbers at h2
 
 example {n : ℤ} (hn : n + 3 = 7) : ¬ (Int.Even n ∧ n ^ 2 = 10) := by
-  sorry
+  intro h1
+  obtain ⟨h2, h3⟩ := h1
+  have h4 : n = 4 := by addarith [hn]
+  rw [h4] at h3
+  numbers at h3
 
 example {x : ℝ} (hx : x ^ 2 < 9) : ¬ (x ≤ -3 ∨ x ≥ 3) := by
-  sorry
+  intro h1
+  obtain h2 | h3 := h1
+  · have h4 : -x ≥ 3 := by addarith [h2]
+    have h5 : x ^ 2 ≥ 9 :=
+    calc x ^ 2 = -x * -x := by ring
+      _ ≥ 3 * 3 := by rel [h4]
+      _ = 9 := by numbers
+    have h6 : ¬x ^ 2 < 9 := not_lt_of_ge h5
+    contradiction
+  · have h7 : x ^ 2 ≥ 9 :=
+    calc x ^ 2 = x * x := by ring
+      _ ≥ 3 * 3 := by rel [h3]
+      _ = 9 := by numbers
+    have h8 : ¬x ^ 2 < 9 := not_lt_of_ge h7
+    contradiction
 
 example : ¬ (∃ N : ℕ, ∀ k > N, Nat.Even k) := by
-  sorry
+  intro h1
+  obtain ⟨a, h2⟩ := h1
+  obtain h3 | h4 := Nat.even_or_odd a
+  · obtain ⟨b, h5⟩ := h3
+    have h6 : 2 * b + 1 > a := by addarith [h5]
+    have h7 : Nat.Even (2 * b + 1) := h2 (2 * b + 1) h6
+    have h8 : Nat.Odd (2 * b + 1)
+    · use b
+      ring
+    rw [Nat.even_iff_not_odd] at h7
+    contradiction
+  · obtain ⟨c, h9⟩ := h4
+    have h10 : 2 * c + 3 > a := by addarith [h9]
+    have h11 : Nat.Even (2 * c + 3) := h2 (2 * c + 3) h10
+    have h12 : Nat.Odd (2 * c + 3)
+    · use c + 1
+      ring
+    rw [Nat.even_iff_not_odd] at h11
+    contradiction
 
 example (n : ℤ) : ¬(n ^ 2 ≡ 2 [ZMOD 4]) := by
   sorry
