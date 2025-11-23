@@ -258,10 +258,53 @@ example : ¬ (∃ N : ℕ, ∀ k > N, Nat.Even k) := by
     contradiction
 
 example (n : ℤ) : ¬(n ^ 2 ≡ 2 [ZMOD 4]) := by
-  sorry
+  mod_cases hn : n % 4 <;> intro h1
+  · have h2 :=
+    calc 0 ^ 2 ≡ n ^ 2 [ZMOD 4] := by rel [hn]
+      _ ≡ 2 [ZMOD 4] := h1
+    numbers at h2
+  · have h3 :=
+    calc 1 ^ 2 ≡ n ^ 2 [ZMOD 4] := by rel [hn]
+      _ ≡ 2 [ZMOD 4] := h1
+    numbers at h3
+  · have h4 :=
+    calc 0 ≡ 4 * 1 [ZMOD 4] := by extra
+      _ = 2 ^ 2 := by numbers
+      _ ≡ n ^ 2 [ZMOD 4] := by rel [hn]
+      _ ≡ 2 [ZMOD 4] := h1
+    numbers at h4
+  · have h5 :=
+    calc 1 ≡ 1 + 4 * 2 [ZMOD 4] := by extra
+      _ = 3 ^ 2 := by numbers
+      _ ≡ n ^ 2 [ZMOD 4] := by rel [hn]
+      _ ≡ 2 [ZMOD 4] := h1
+    numbers at h5
 
 example : ¬ Prime 1 := by
-  sorry
+  intro h1 -- intro ⟨h2, h3⟩
+  obtain ⟨h2, h3⟩ := h1
+  numbers at h2
 
 example : Prime 97 := by
-  sorry
+  apply better_prime_test (T := 10)
+  · numbers
+  · numbers
+  intro m hm1 hm2
+  apply Nat.not_dvd_of_exists_lt_and_lt
+  interval_cases m
+  · use 48
+    constructor <;> numbers
+  · use 32
+    constructor <;> numbers
+  · use 24
+    constructor <;> numbers
+  · use 19
+    constructor <;> numbers
+  · use 16
+    constructor <;> numbers
+  · use 13
+    constructor <;> numbers
+  · use 12
+    constructor <;> numbers
+  · use 10
+    constructor <;> numbers
